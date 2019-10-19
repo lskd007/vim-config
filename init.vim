@@ -7,7 +7,6 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'huytd/vim-quickrun'
 " Language support things
 Plug 'sheerun/vim-polyglot'
-Plug 'rust-lang/rust.vim'
 Plug 'othree/html5.vim'
 Plug 'cakebaker/scss-syntax.vim'
 " LSP support
@@ -55,7 +54,7 @@ let g:is_posix = 1
 set noswapfile
 set nojoinspaces
 set nowrap
-set number
+set relativenumber
 set ttyfast
 set laststatus=2
 set ttimeout
@@ -114,9 +113,9 @@ set list
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
 
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 set shiftround
 set expandtab
 
