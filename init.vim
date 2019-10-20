@@ -4,7 +4,7 @@ Plug 'tpope/vim-fugitive'
 " EditorConfig
 Plug 'editorconfig/editorconfig-vim'
 " Execute code in current buffer
-Plug 'huytd/vim-quickrun'
+"Plug 'huytd/vim-quickrun'
 " Language support things
 Plug 'sheerun/vim-polyglot'
 Plug 'othree/html5.vim'
@@ -47,13 +47,14 @@ set nowritebackup
 set mouse=a " enable mouse for all mode
 set wildoptions=pum
 set pumblend=20
-set cursorline
+"set cursorline
 
 let g:is_posix = 1
 
 set noswapfile
 set nojoinspaces
 set nowrap
+set number
 set relativenumber
 set ttyfast
 set laststatus=2
@@ -61,6 +62,7 @@ set ttimeout
 set ttimeoutlen=10
 set termguicolors
 set ignorecase
+set smartcase
 
 " Tweak for Markdown mode
 autocmd FileType markdown call s:markdown_mode_setup()
@@ -77,7 +79,7 @@ let g:coc_status_error_sign=" "
 let g:coc_status_warning_sign=" "
 
 " I don't use recording, don't judge me
-map q <Nop>
+"map q <Nop>
 inoremap jk <ESC>
 vnoremap <M-/> <Esc>/\%V
 nnoremap <Left> :echoe "Use h"<CR>
@@ -88,12 +90,6 @@ nnoremap <ESC><ESC> :nohlsearch<CR>
 
 " Duplicate everything selected
 vmap D y'>p
-
-" Map Emacs like movement in Insert mode
-inoremap <C-n> <Down>
-inoremap <C-p> <Up>
-inoremap <C-e> <C-o>$
-inoremap <C-a> <C-o>^
 
 " Remap scrolling
 nnoremap <C-k> <C-u>
@@ -185,24 +181,33 @@ nnoremap <Leader>wj :wincmd j<CR>
 nnoremap <Leader>w= :wincmd =<CR>
 nnoremap <Leader>e :QuickRunExecute<CR>
 nnoremap <Leader>wb :e#<CR>
+" delete buffer
 nnoremap <Leader>qq :bd<CR>
+"source file
 nnoremap <Leader>ss :mksession! .work<CR>
 nnoremap <Leader>sr :so .work<CR>
 nnoremap <Leader><Leader>r :so ~/.config/nvim/init.vim<CR>
-nnoremap <Leader>n :NERDTree<CR>
+nnoremap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>f :NERDTreeFind<CR>
+" open Class\module\file structure
 nnoremap <Leader><Leader>o :Vista coc<CR>
 "Buffer
 nnoremap <Leader>tn :tabn<CR>
 nnoremap <Leader>tp :tabp<CR>
 nnoremap <Leader>tc :tabe<CR>
 nnoremap <Leader>tx :tabclose<CR>
+"Tab
+nnoremap <Leader>tn :tabn<CR>
+nnoremap <Leader>tp :tabp<CR>
+nnoremap <Leader>tc :tabe<CR>
+nnoremap <Leader>tx :tabclose<CR>
 " Open terminal
-nnoremap <Leader>at :call FloatTerm()<CR>
+nnoremap <Leader>at :call FloatTerm('zsh')<CR>
 " Open node REPL
 nnoremap <Leader>an :call FloatTerm('"node"')<CR>
 " Open tig, yes TIG, A FLOATING TIGGGG!!!!!!
 nnoremap <Leader>ag :call FloatTerm('"tig"')<CR>
+nnoremap <Leader>ap :call FloatTerm('"python3"')<CR>
 
 " NERDTree config
 let NERDTreeMinimalUI=1
@@ -451,7 +456,21 @@ function! s:denite_my_settings() abort
                 \ denite#do_map('toggle_select').'j'
 endfunction
 
-autocmd FileType denite-filter call s:denite_filter_my_settings()
+autocmd FileType te shorcuts === "
+
+"   ;         - Browser currently open buffers
+"   "   <leader>t - Browse list of files in current directory
+"   "   <leader>g - Search current directory for occurences of given term and
+"   close window if no results
+"   "   <leader>j - Search current directory for occurences of word under
+"   cursor
+nmap  <leader>b :Denite buffer<CR>
+nmap <leader>t :DeniteProjectDir file/rec<CR>
+nnoremap <leader>g :<C-u>Denite grep:. -no-empty<CR>
+nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
+
+
+autocmd Filetype call s:denite_filter_my_settings()
 function! s:denite_filter_my_settings() abort
     imap <silent><buffer> <tab> <Plug>(denite_filter_quit)
     inoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
