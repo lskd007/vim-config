@@ -16,7 +16,7 @@ Plug 'neoclide/coc-denite'
 Plug 'scrooloose/nerdtree'
 Plug 'itchyny/lightline.vim'
 Plug 'ryanoasis/vim-devicons'
-Plug 'Shougo/denite.nvim'
+"Plug 'Shougo/denite.nvim'
 Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
 Plug 'tyrannicaltoucan/vim-quantum'
 " Auto root folder switcher
@@ -48,7 +48,9 @@ set mouse=a " enable mouse for all mode
 set wildoptions=pum
 set pumblend=20
 "set cursorline
-
+" find in sub directory
+set path+=**
+set wildignore+=**/node_modules/**,**/venv/**,**/lenv/**,**/migrations/**,**/instance/**,**/__pycache__/**
 let g:is_posix = 1
 
 set noswapfile
@@ -75,8 +77,8 @@ function! s:markdown_mode_setup()
 endfunction
 
 " Custom icon for coc.nvim statusline
-let g:coc_status_error_sign=" "
-let g:coc_status_warning_sign=" "
+"let g:coc_status_error_sign=" "
+"let g:coc_status_warning_sign=" "
 
 " I don't use recording, don't judge me
 "map q <Nop>
@@ -178,9 +180,9 @@ nnoremap <Leader>wh :wincmd h<CR>
 nnoremap <Leader>wl :wincmd l<CR>
 nnoremap <Leader>wk :wincmd k<CR>
 nnoremap <Leader>wj :wincmd j<CR>
-nnoremap <Leader>w= :wincmd =<CR>
-nnoremap <Leader>e :QuickRunExecute<CR>
-nnoremap <Leader>wb :e#<CR>
+"nnoremap <Leader>w= :wincmd =<CR>
+"nnoremap <Leader>e :QuickRunExecute<CR>
+"nnoremap <Leader>wb :e#<CR>
 " delete buffer
 nnoremap <Leader>qq :bd<CR>
 "source file
@@ -405,56 +407,56 @@ let g:rooter_patterns = ['Cargo.tom', 'package.json', '.git/']
 " DENITE
 let g:fruzzy#sortonempty = 1
 let g:fruzzy#usenative = 1
-call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
-call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
-call denite#custom#var('grep', 'command', ['rg'])
-call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-call denite#custom#source('grep', 'converters', ['converter/abbr_word'])
-call denite#custom#option('_', 'max_dynamic_update_candidates', 100000)
-call denite#custom#var('outline', 'command', ['ctags'])
-" Tell ctags write tags to stdin, so Denite can pick it up
-call denite#custom#var('outline', 'options', ['-f -', '--excmd=number'])
+"call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
+"call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
+"call denite#custom#var('grep', 'command', ['rg'])
+"call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S'])
+"call denite#custom#var('grep', 'recursive_opts', [])
+"call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+"call denite#custom#var('grep', 'separator', ['--'])
+"call denite#custom#var('grep', 'final_opts', [])
+"call denite#custom#source('grep', 'converters', ['converter/abbr_word'])
+"call denite#custom#option('_', 'max_dynamic_update_candidates', 100000)
+"call denite#custom#var('outline', 'command', ['ctags'])
+"" Tell ctags write tags to stdin, so Denite can pick it up
+"call denite#custom#var('outline', 'options', ['-f -', '--excmd=number'])
 
-let s:denite_options = {
-      \ 'prompt' : '',
-      \ 'split': 'floating',
-      \ 'start_filter': 1,
-      \ 'auto_resize': 1,
-      \ 'source_names': 'short',
-      \ 'direction': 'botright',
-      \ 'statusline': 0,
-      \ 'cursorline': 0,
-      \ 'highlight_matched_char': 'WildMenu',
-      \ 'highlight_matched_range': 'WildMenu',
-      \ 'highlight_window_background': 'Visual',
-      \ 'highlight_filter_background': 'CocListMagentaGray',
-      \ 'highlight_preview_line': 'Cursor',
-      \ 'vertical_preview': 1
-      \ }
+"let s:denite_options = {
+      "\ 'prompt' : '',
+      "\ 'split': 'floating',
+      "\ 'start_filter': 1,
+      "\ 'auto_resize': 1,
+      "\ 'source_names': 'short',
+      "\ 'direction': 'botright',
+      "\ 'statusline': 0,
+      "\ 'cursorline': 0,
+      "\ 'highlight_matched_char': 'WildMenu',
+      "\ 'highlight_matched_range': 'WildMenu',
+      "\ 'highlight_window_background': 'Visual',
+      "\ 'highlight_filter_background': 'CocListMagentaGray',
+      "\ 'highlight_preview_line': 'Cursor',
+      "\ 'vertical_preview': 1
+      "\ }
 
-call denite#custom#option('default', s:denite_options)
+"call denite#custom#option('default', s:denite_options)
 
-autocmd FileType denite call s:denite_my_settings()
-function! s:denite_my_settings() abort
-    nnoremap <silent><buffer><expr> <CR>
-                \ denite#do_map('do_action')
-    nnoremap <silent><buffer><expr> d
-                \ denite#do_map('do_action', 'delete')
-    nnoremap <silent><buffer><expr> <c-p>
-                \ denite#do_map('do_action', 'preview')
-    nnoremap <silent><buffer><expr> q
-                \ denite#do_map('quit')
-    nnoremap <silent><buffer><expr> i
-                \ denite#do_map('open_filter_buffer')
-    nnoremap <silent><buffer><expr> <c-a>
-                \ denite#do_map('toggle_select_all')
-    nnoremap <silent><buffer><expr> <c-t>
-                \ denite#do_map('toggle_select').'j'
-endfunction
+"autocmd FileType denite call s:denite_my_settings()
+"function! s:denite_my_settings() abort
+    "nnoremap <silent><buffer><expr> <CR>
+                "\ denite#do_map('do_action')
+    "nnoremap <silent><buffer><expr> d
+                "\ denite#do_map('do_action', 'delete')
+    "nnoremap <silent><buffer><expr> <c-p>
+                "\ denite#do_map('do_action', 'preview')
+    "nnoremap <silent><buffer><expr> q
+                "\ denite#do_map('quit')
+    "nnoremap <silent><buffer><expr> i
+                "\ denite#do_map('open_filter_buffer')
+    "nnoremap <silent><buffer><expr> <c-a>
+                "\ denite#do_map('toggle_select_all')
+    "nnoremap <silent><buffer><expr> <c-t>
+                "\ denite#do_map('toggle_select').'j'
+"endfunction
 
 autocmd FileType te shorcuts === "
 
@@ -464,35 +466,35 @@ autocmd FileType te shorcuts === "
 "   close window if no results
 "   "   <leader>j - Search current directory for occurences of word under
 "   cursor
-nmap  <leader>b :Denite buffer<CR>
-nmap <leader>t :DeniteProjectDir file/rec<CR>
-nnoremap <leader>g :<C-u>Denite grep:. -no-empty<CR>
-nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
+"nmap  <leader>b :Denite buffer<CR>
+"nmap <leader>t :DeniteProjectDir file/rec<CR>
+"nnoremap <leader>g :<C-u>Denite grep:. -no-empty<CR>
+"nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
 
 
-autocmd Filetype call s:denite_filter_my_settings()
-function! s:denite_filter_my_settings() abort
-    imap <silent><buffer> <tab> <Plug>(denite_filter_quit)
-    inoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
-    inoremap <silent><buffer><expr> <c-a>
-                \ denite#do_map('toggle_select_all')
-    inoremap <silent><buffer><expr> <c-t>
-                \ denite#do_map('toggle_select')
-    inoremap <silent><buffer><expr> <c-o>
-                \ denite#do_map('do_action', 'quickfix')
-    inoremap <silent><buffer><expr> <esc>
-                \ denite#do_map('quit')
-    inoremap <silent><buffer> <C-j>
-                \ <Esc><C-w>p:call cursor(line('.')+1,0)<CR><C-w>pA
-    inoremap <silent><buffer> <C-k>
-                \ <Esc><C-w>p:call cursor(line('.')-1,0)<CR><C-w>pA
-endfunction
+"autocmd Filetype call s:denite_filter_my_settings()
+"function! s:denite_filter_my_settings() abort
+    "imap <silent><buffer> <tab> <Plug>(denite_filter_quit)
+    "inoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
+    "inoremap <silent><buffer><expr> <c-a>
+                "\ denite#do_map('toggle_select_all')
+    "inoremap <silent><buffer><expr> <c-t>
+                "\ denite#do_map('toggle_select')
+    "inoremap <silent><buffer><expr> <c-o>
+                "\ denite#do_map('do_action', 'quickfix')
+    "inoremap <silent><buffer><expr> <esc>
+                "\ denite#do_map('quit')
+    "inoremap <silent><buffer> <C-j>
+                "\ <Esc><C-w>p:call cursor(line('.')+1,0)<CR><C-w>pA
+    "inoremap <silent><buffer> <C-k>
+                "\ <Esc><C-w>p:call cursor(line('.')-1,0)<CR><C-w>pA
+"endfunction
 
-nnoremap \ :Denite grep<CR>
-nnoremap <Leader>pf :Denite file/rec<CR>
-nnoremap <Leader>pr :Denite file/old buffer<CR>
-nnoremap <C-o> :Denite outline<CR>
-map * :Denite -resume -refresh<CR>
+"nnoremap \ :Denite grep<CR>
+"nnoremap <Leader>pf :Denite file/rec<CR>
+"nnoremap <Leader>pr :Denite file/old buffer<CR>
+"nnoremap <C-o> :Denite outline<CR>
+"map * :Denite -resume -refresh<CR>
 
 " Multiple Cursor
 let g:multi_cursor_use_default_mapping=0
@@ -514,8 +516,8 @@ highlight Normal guibg=NONE
 highlight EasyMotionTargetDefault guifg=#ffb400
 highlight NonText guifg=#354751
 highlight VertSplit guifg=#212C32
-highlight link deniteSource_SymbolsName Symbol
-highlight link deniteSource_SymbolsHeader String
-highlight link deniteSource_grepLineNR deniteSource_grepFile
+"highlight link deniteSource_SymbolsName Symbol
+"highlight link deniteSource_SymbolsHeader String
+"highlight link deniteSource_grepLineNR deniteSource_grepFile
 highlight WildMenu guibg=NONE guifg=#87bb7c
 highlight CursorLineNr guibg=NONE
